@@ -126,6 +126,10 @@ WeChat.prototype = {
                 _this.po_Last_Div($('#messageInput')[0]);
             }
         });
+        // 清屏
+        $('#clearBtn').on('click', function(){
+            $('#historyMsg').empty();
+        });
     },
     sendMsg: function (user, msg, color) {
         var color = color || '#000';
