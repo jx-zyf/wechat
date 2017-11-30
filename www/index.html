@@ -21,25 +21,25 @@
             </div>
             <div class="controls">
                 <div class="items">
-                    <input id="colorStyle" type="color" placeHolder='#000' title="font color" />
-                    <input id="emoji" type="button" value="emoji" title="emoji" />
+                    <input id="colorStyle" type="color" placeHolder='#000' title="字体颜色" />
+                    <button id="emoji" title="emoji">emoji</button>
                     <label for="sendImage" class="imageLable">
                         <input type="button" value="image" />
                         <input id="sendImage" type="file" value="image" />
                     </label>
-                    <input id="clearBtn" type="button" value="clear" title="clear screen" />
+                    <button id="clearBtn" title="clear screen">clear</button>
                 </div>
-                <div contenteditable="true" id="messageInput" placeHolder="shift+enter to send"></div>
-                <input id="sendBtn" type="button" value="send">
-                <div id="emojiWrapper">
-                </div>
+                <div contenteditable="true" id="messageInput" placeHolder="shift+enter 快捷发送"></div>
+                <input id="sendBtn" type="button" value="发送">
+                <div id="emojiWrapper"></div>
             </div>
         </div>
         <div id="loginWrapper">
-            <p id="info">connecting to server...</p>
+            <h2>一起high聊</h2>
+            <p id="info">正在连接服务器...</p>
             <div id="nickWrapper">
-                <input type="text" placeHolder="nickname" id="nicknameInput" />
-                <input type="button" value="OK" id="loginBtn" />
+                <input type="text" placeHolder="请输入..." id="nicknameInput" />
+                <input type="button" value="加入聊天" id="loginBtn" />
             </div>
         </div>
         <script src="/socket.io/socket.io.js"></script>

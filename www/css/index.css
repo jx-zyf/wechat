@@ -2,14 +2,10 @@ html, body {
     margin: 0;
     background-color: #efefef;
     font-family: sans-serif;
+    overflow: hidden;
 }
-.wrapper {
-    width: 800px;
-    height: 640px;
-    padding: 5px;
-    margin: 0 auto;
-    background-color: #ddd;
-}
+
+/* 登录 */
 #loginWrapper {
     position: fixed;
     top: 0;
@@ -18,9 +14,12 @@ html, body {
     left: 0;
     background-color: rgba(5, 5, 5, .6);
     text-align: center;
-    color: #fff;
+    color: #0094ff;
     display: block;
-    padding-top: 200px;
+    padding-top: 30vh;
+}
+#info {
+    font-size: 1.2rem;
 }
 #loginWrapper.hide {
     display: none;
@@ -28,27 +27,63 @@ html, body {
 #nickWrapper {
     display: none;
 }
+#nicknameInput, #loginBtn {
+    display: block;
+    margin: auto;
+    width: 60vw;
+    max-width: 300px;
+    height: 15vh;
+    max-height: 40px;
+    border-radius: 5px;
+    text-indent: 1em;
+}
+#nicknameInput:focus {
+    border: 1px solid lightblue;
+    border-radius: 5px;
+    outline: none;
+}
+#loginBtn {
+    margin-top: 15px;
+    cursor: pointer;
+    background-color: lightblue;
+    font-size: 1.0rem;
+}
 #nickWrapper.show {
     display: block;
 }
+
+/* 整个容器 */
+.wrapper {
+    width: 96%;
+    max-width: 800px;
+    height: 100vh;
+    padding: 5px;
+    margin: 0 auto;
+    background-color: #ddd;
+}
+
+/* banner */
 .banner {
-    height: 80px;
+    height: 10vh;
     width: 100%;
     position: relative;
+    text-align: center;
+    color: #0094ff;
+}
+.banner>h1 {
+    font-size: 2rem;
 }
 .banner span#status {
     position: absolute;
-    left: 5px;
+    left: 50%;
     bottom: 5px;
+    transform: translateX(-50%);
+    font-size: 0.8rem;
 }
-.controls {
-    height: 100px;
-    margin: 5px 0px;
-    position: relative;
-}
+/* 消息框 */
 #historyMsg {
-    height: 400px;
-    background-color: #fff;
+    height: 65vh;
+    background-color: #eee;
     overflow: auto;
     padding: 2px;
 }
@@ -58,30 +93,104 @@ html, body {
 #historyMsg p{
     text-align: left;
     position: relative;
+    margin-bottom: 25px;
 }
 .msg{
     display: inline-block;
-    vertical-align: top;
-    text-indent: 1em;
     width: auto;
-    max-width: 60%;
+    max-width: 70%;
     text-align: left;
+    background-color: #ccc;
+    border-radius: 16px;
+    padding: 5px 16px;
+}
+.msg_l, .msg_r {
+    background-color: #fff;
+    letter-spacing: 2px;
+    line-height: 1.5em;
+    border-radius: 6px;
+    position: relative;
+}
+.msg_l {
+    transform: translateX(10px) translateY(10px);
+}
+.msg_r {
+    transform: translateX(-10px) translateY(10px);
+}
+.msg_l::after, .msg_r::after {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: 100%;
+    width: 0;
+    height: 0;
+    border-width: 10px;
+    border-style: solid;
+    border-color: transparent transparent #fff transparent;
+}
+.msg_r::after {
+    right: 15px;
+}
+.msg_l::after {
+    left: 15px;
 }
 .timeSpan {
-    display: inline-block;
-    vertical-align: top;
+    display: block;
     color: #0094ff;
 }
-.items {
-    height: 30px;
-}
-#colorStyle {
-    width: 50px;
-    border: none;
-    padding: 0;
-}
-/*custom the file input*/
 
+/* 控制栏 */
+.controls {
+    height: 25vh;
+    margin: 5px 0px;
+    position: relative;
+}
+.items {
+    height: 25%;
+    display: flex;
+    align-items: center;
+}
+.items input {
+    cursor: pointer;
+}
+#colorStyle, #emoji, #clearBtn, .imageLable {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    position: relative;
+    visibility: hidden;
+    vertical-align: middle;
+    margin: 0 5px;
+    box-sizing: border-box;
+    border: 1px solid transparent;
+}
+#colorStyle::before, #emoji::before, #clearBtn::before, .imageLable::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    top: 0;
+    padding: 0;
+    background-size: cover;
+    cursor: pointer;
+    visibility: visible;
+}
+#colorStyle::before {
+    background-image: url('../images/fontColor.png');
+}
+#emoji::before {
+    background-image: url('../images/emoji.png');
+}
+.imageLable::before {
+    background-image: url('../images/image.png');
+}
+#clearBtn::before {
+    background-image: url('../images/clear.png');
+}
+
+/*custom the file input*/
 .imageLable {
     position: relative;
 }
@@ -92,32 +201,51 @@ html, body {
     opacity: 0;
     overflow: hidden;
 }
-/*end custom file input*/
 
+/*end custom file input*/
 #messageInput {
     box-sizing: border-box;
-    width: 740px;
-    max-width: 740px;
-    height: 100px;
-    max-height: 100px;
+    width: 80%;
+    height: 50%;
     display: inline-block;
     border: 1px solid #aaa;
     text-indent: 1em;
+    letter-spacing: 2px;
+    line-height: 1.5em;
     padding: 5px;
-    overflow: scroll;
+    overflow: auto;
+    vertical-align: middle;
+}
+#messageInput img{
+    max-width: 30%;
+}
+#messageInput:focus {
+    border: 1px solid #0094ff;
+    border-radius: 5px;
+    outline: none;
+    font-size: 1.0rem;
 }
 #sendBtn {
-    width: 50px;
-    height: 96px;
+    width: 20%;
+    height: 50%;
     float: right;
+    background-color: lightblue;
+    outline: none;
+    cursor: pointer;
+    font-size: 1.0rem;
+    vertical-align: middle;
 }
+
 #emojiWrapper {
     display: none;
-    width: 500px;
-    bottom: 105px;
+    width: 80vw;
+    margin: auto;
+    max-width: 500px;
     position: absolute;
-    background-color: #aaa;
-    box-shadow: 0 0 10px #555;
+    bottom: 102%;
+    left: 10px;
+    background-color: #ccc;
+    box-shadow: 0 0 10px #999;
 }
 #emojiWrapper img {
     margin: 2px;

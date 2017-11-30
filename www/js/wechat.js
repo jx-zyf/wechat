@@ -14,7 +14,7 @@ WeChat.prototype = {
         // 建立连接
         this.socket = io.connect();
         this.socket.on('connect', function () {
-            $('#info').text('input your nickname...');
+            $('#info').text('输入昵称：');
             $('#nicknameInput').val('');    // 火狐输入框会记录之前的值
             $('#nicknameInput').focus();
             // 登录
@@ -23,7 +23,7 @@ WeChat.prototype = {
                     _this.socket.emit('login', $('#nicknameInput').val());
                 } else {
                     $('#nicknameInput').focus();
-                    alert('please input your nickname!');
+                    alert('昵称不能为空');
                 }
             });
             // 回车登录
@@ -52,7 +52,7 @@ WeChat.prototype = {
             _this.socket.on('system', function (nickname, userCount, type) {
                 $('#status').text('当前在线人数：' + userCount);
                 var msg = nickname + (type === 'login' ? ' 加入了' : '离开了') + '聊天！';
-                _this.sendMsg('系统', msg, 'red');
+                _this.sendMsg('系统', msg, '#999');
             });
         });
         // 发消息
@@ -60,9 +60,11 @@ WeChat.prototype = {
             var msg = $('#messageInput').html().replace(/&nbsp;/g, '').replace(/<br>/g, ' ');
             //获取颜色值
             var color = $('#colorStyle').val();
-            if (msg.length > 0) {
+            if (msg.trim().length > 0) {
                 _this.socket.emit('sendMsg', msg, color);
                 _this.sendMsg(_this.curUser, msg, color);
+            } else {
+                alert('不能发送空消息！');
             }
             $('#messageInput').html('');
             $('#messageInput').focus();
@@ -74,9 +76,11 @@ WeChat.prototype = {
                 //获取颜色值
                 var color = $('#colorStyle').val();
                 $('#messageInput').html('');
-                if (msg.length > 0) {
+                if (msg.trim().length > 0) {
                     _this.socket.emit('sendMsg', msg, color);
                     _this.sendMsg(_this.curUser, msg, color);
+                } else {
+                    alert('不能发送空消息！');
                 }
                 $('#messageInput').focus();
                 return false;
@@ -135,16 +139,21 @@ WeChat.prototype = {
         var color = color || '#000';
         var date = new Date().toTimeString().substr(0, 8);
         var msg = this.showEmoji(msg);
-        var p = user === this.curUser
-            ? '<p data_user="' + user + '"><span class="msg">' + msg + '</span><span class="timeSpan">：(' + date + ')' + user + ' </span></p>'
-            : '<p data_user="' + user + '"><span class="timeSpan">' + user + '(' + date + ') ：</span><span class="msg">' + msg + '</span></p>';
+        var p = '';
+        if (user === this.curUser) {
+            p = '<p data_user="' + user + '"><span class="timeSpan">：(' + date + ')' + user + ' </span><span class="msg msg_r">' + msg + '</span></p>';
+        } else if ( user === '系统') {
+            p = '<p data_user="' + user + '"><span class="timeSpan">' + user + '(' + date + ') ：</span><span class="msg msg_c">' + msg + '</span></p>';
+        } else {
+            p = '<p data_user="' + user + '"><span class="timeSpan">' + user + '(' + date + ') ：</span><span class="msg msg_l">' + msg + '</span></p>';
+        }
         // 用户进入聊天室才能接收消息
         if ($('#loginWrapper').attr('class').includes('hide')) {
             $('#historyMsg').append(p);
             $('#historyMsg p').filter($('[data_user=' + user + ']')).css('color', color);
             $('#historyMsg p').filter($('[data_user=系统]')).css('text-align', 'center');
-            $('#historyMsg p').filter($('[data_user=系统]')).find('.timeSpan').css('color', 'red');
-            $('#historyMsg p').filter($('[data_user=系统]')).find('.msg').css('display', 'inline');
+            $('#historyMsg p').filter($('[data_user=系统]')).find('.timeSpan').css('display', 'none');
+            $('#historyMsg p').filter($('[data_user=系统]')).find('.msg_c').css('display', 'inline');
             $('#historyMsg p').filter($('[data_user=' + this.curUser + ']')).css('text-align', 'right');
             $('#historyMsg').scrollTop($('#historyMsg')[0].scrollHeight - $('#historyMsg').height());     // 保证消息出现在可见区域
         }
